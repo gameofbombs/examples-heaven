@@ -1,0 +1,110 @@
+{
+    "picture": [
+        {
+            "title": "Overlay blendMode",
+            "entry": "overlay.js",
+            "plugins": [
+                "pixi-picture"
+            ]
+        }
+    ],
+    "layers": [
+        {
+            "title": "Lighting",
+            "entry": "lighting.js",
+            "plugins": [
+                "pixi-layers"
+            ]
+        },
+		{
+            "title": "Z-order",
+            "entry": "zorder.js",
+            "plugins": [
+                "pixi-layers"
+            ]
+        }
+    ],
+    "projection": [
+        {
+            "title": "Basics",
+            "entry": "basic.js",
+            "plugins": [
+                "pixi-projection"
+            ]
+        },
+        {
+            "title": "Plane",
+            "entry": "plane.js",
+            "plugins": [
+                "pixi-projection"
+            ]
+        },
+        {
+            "title": "Plane Tiling",
+            "entry": "plane-tiling.js",
+            "plugins": [
+                "pixi-projection"
+            ]
+        },
+        {
+            "title": "Quad projective",
+            "entry": "quad-homo.js",
+            "plugins": [
+                "pixi-projection"
+            ]
+        },
+		{
+            "title": "Quad bilinear",
+            "entry": "quad-bi.js",
+            "plugins": [
+                "pixi-projection"
+            ]
+        }
+    ],
+    "spine": [
+        {
+            "title": "Dragon",
+            "entry": "dragon.js",
+            "plugins": [
+                "pixi-spine"
+            ]
+        },
+        {
+            "title": "Goblin",
+            "entry": "goblins.js",
+            "plugins": [
+                "pixi-spine"
+            ]
+        },
+        {
+            "title": "Pixie",
+            "entry": "pixie.js",
+            "plugins": [
+                "pixi-spine"
+            ]
+        },
+        {
+            "title": "Walking Animation",
+            "entry": "spineboy.js",
+            "plugins": [
+                "pixi-spine"
+            ]
+        }
+    ],
+    "textures": [
+        {
+            "title": "Not-premultiplied alpha",
+            "entry": "not-premultiplied-alpha.js",
+            "plugins": [
+                "pixi-compressed-textures"
+            ]
+        },
+        {
+            "title": "Extension chooser",
+            "entry": "dds.js",
+            "plugins": [
+                "pixi-compressed-textures"
+            ]
+        }
+    ]
+}
