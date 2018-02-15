@@ -1,4 +1,14 @@
 {
+    "basics": [
+        {
+            "title": "Basics",
+            "entry": "basic.js",
+            "plugins": [
+                "pixi-spine",
+                "pixi-heaven"
+            ]
+        }
+    ],
     "heaven": [
         {
             "title": "Colored Rope",
