@@ -1,4 +1,14 @@
 {
+    "heaven": [
+        {
+            "title": "Colored Rope",
+            "entry": "rope-colored.js",
+            "plugins": [
+                "pixi-spine",
+                "pixi-heaven"
+            ]
+        }
+    ],
     "picture": [
         {
             "title": "Overlay blendMode",
