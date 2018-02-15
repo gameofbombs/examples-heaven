@@ -1,4 +1,13 @@
-var app = new PIXI.Application(800, 600, {backgroundColor: 0x020222, autoStart: true});
+/**
+ * This is advanced demo of pixi-heaven mesh.
+ *
+ * The artifacts you see appear because rope intersects itself, we need better formulas or less curvature.
+ * Also alpha=1 and NORMAL blendmode should hide that effect.
+ */
+
+
+
+let app = new PIXI.Application(800, 600, {backgroundColor: 0x020222, autoStart: true});
 document.body.appendChild(app.view);
 
 //create texture for rope
@@ -25,7 +34,7 @@ circle.endFill();
 app.renderer.render(circle, renderTexture);
 
 //Get the texture for rope.
-let trailTexture = renderTexture
+let trailTexture = renderTexture;
 let historyX = [];
 let historyY = [];
 //historySize determines how long the trail will be.
@@ -40,7 +49,7 @@ let rope;
 let phase = 0;
 // Listen for animate update
 app.ticker.add(function (delta) {
-    var time = (new Date()).getTime();////
+    let time = (new Date()).getTime();////
     let speedphase = 0.02 * (Math.cos(time / 2000));
     phase += (0.06 + speedphase);
     let pc = Math.cos(phase);
@@ -69,22 +78,22 @@ app.ticker.add(function (delta) {
 
     let d;
     let scaleF = function (i) {
-        return 0.5 + 0.5 * (i / rope.points.length) - speedphase
+        return 0.5 + 0.5 * (i / points.length) - speedphase
     };
-    let pcabs = Math.abs(speedphase * 25);
+    let pcabs = Math.abs(speedphase * ropeSize);
 
-    for (let i = 0; i < points.length; i++) {
-        const vn = i / points.length;
+    for (let i = 0; i < ropeSize; i++) {
+        const vn = i / ropeSize;
         let R = 0. + 0.3 * (1 - vn) + pcabs,
             G = 0. + 0.3 * (1 - vn ) + pcabs,
             B = 1;
 
         points[i].color.setLight(R, G, B);
-        // points[i].color.setDark(R, G, B);
+        points[i].color.setDark(R, G, B);
     }
 
     //Setting rope width
-    for (let x = 0; x < rope.points.length; ++x) {
+    for (let x = 0; x < ropeSize; ++x) {
         rope.points[x].scale = scaleF(x)
     }
 
