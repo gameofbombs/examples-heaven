@@ -85,11 +85,11 @@ app.ticker.add(function (delta) {
     for (let i = 0; i < ropeSize; i++) {
         const vn = i / ropeSize;
         let B = 0. + 0.3 * (1 - vn) + pcabs,
-            G = 0. + 0.3 * (1 - vn ) + pcabs,
+            G = 0. + 0.3 * (1 - vn) + pcabs,
             R = 1;
 
         points[i].color.setLight(R, G, B);
-        points[i].color.setDark(R, G, B);
+        // points[i].color.setDark(R, G, B);
     }
 
     //Setting rope width
