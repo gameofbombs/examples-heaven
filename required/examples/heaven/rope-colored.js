@@ -59,7 +59,7 @@ app.ticker.add(function (delta) {
             points.push(new PIXI.heaven.mesh.RopePoint(pos.x, pos.y));
 
         //Create the rope
-        rope = new PIXI.heaven.mesh.Rope(trailTexture, points, 2);
+        rope = new PIXI.heaven.mesh.Rope(trailTexture, points, 3);
 
         rope.enableColors();
         rope.blendMode = PIXI.BLEND_MODES.ADD;
