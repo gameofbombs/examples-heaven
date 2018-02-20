@@ -10,6 +10,22 @@
         }
     ],
     "mesh": [
+	    {
+            "title": "Animation",
+            "entry": "animation.js",
+            "plugins": [
+                "pixi-spine",
+                "pixi-heaven"
+            ]
+        },
+		{
+            "title": "Plane",
+            "entry": "plane.js",
+            "plugins": [
+                "pixi-spine",
+                "pixi-heaven"
+            ]
+        },
         {
             "title": "Colored Rope",
             "entry": "rope-colored.js",
