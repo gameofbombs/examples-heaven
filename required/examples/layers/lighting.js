@@ -21,19 +21,31 @@ var lighting = new PIXI.display.Layer();
 lighting.on('display', function (element) {
     element.blendMode = PIXI.BLEND_MODES.ADD
 });
-lighting.filters = [new PIXI.filters.AlphaFilter()];
-lighting.filters[0].blendMode = PIXI.BLEND_MODES.MULTIPLY;
 
-lighting.filterArea = app.screen;
+var lightingTexture = PIXI.RenderTexture.create(app.screen.width, app.screen.height, undefined, app.renderer.resolution);
+var lightingSprite = new PIXI.Sprite(lightingTexture);
+lightingSprite.blendMode = PIXI.BLEND_MODES.MULTIPLY;
+lighting._preRender = function(renderer) {
+    var res = PIXI.display.Layer.prototype._preRender.call(this, renderer);
+    if (!res) return;
+    renderer.currentRenderer.flush();
+    this._oldRenderTarget = renderer._activeRenderTarget;
+    renderer.bindRenderTexture(lightingTexture);
+    renderer.clear([0.5, 0.5, 0.5, 1]);
+    return true;
+};
+
+lighting._postRender = function(renderer) {
+    PIXI.display.Layer.prototype._postRender.call(this, renderer);
+    renderer.currentRenderer.flush();
+    renderer.bindRenderTarget(this._oldRenderTarget);
+    this._oldRenderTarget = null;
+};
+
 // lighting.filterArea = new PIXI.Rectangle(100, 100, 600, 400); //<-- try uncomment it
+app.stage.addChildAt(lighting, 0);
 
-app.stage.addChild(lighting);
-
-var ambient = new PIXI.Graphics();
-ambient.beginFill(0x808080, 1.0);
-ambient.drawRect(0, 0, WIDTH, HEIGHT);
-ambient.endFill();
-lighting.addChild(ambient); //<-- try comment it
+app.stage.addChild(lightingSprite);
 
 var bunnyTexture = PIXI.Texture.fromImage("required/assets/basics/bunny.png");
 function updateBunny(bunny) {
