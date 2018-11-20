@@ -4,7 +4,6 @@
             "title": "Basics",
             "entry": "basic.js",
             "plugins": [
-                "pixi-spine",
                 "pixi-heaven"
             ]
         }
@@ -14,7 +13,6 @@
             "title": "Animation",
             "entry": "animation.js",
             "plugins": [
-                "pixi-spine",
                 "pixi-heaven"
             ]
         },
@@ -22,7 +20,6 @@
             "title": "Plane",
             "entry": "plane.js",
             "plugins": [
-                "pixi-spine",
                 "pixi-heaven"
             ]
         },
@@ -30,7 +27,6 @@
             "title": "Colored Rope",
             "entry": "rope-colored.js",
             "plugins": [
-                "pixi-spine",
                 "pixi-heaven"
             ]
         },
@@ -38,7 +34,6 @@
             "title": "Interpolated Rope",
             "entry": "rope-interpolated.js",
             "plugins": [
-                "pixi-spine",
                 "pixi-heaven"
             ]
         }
