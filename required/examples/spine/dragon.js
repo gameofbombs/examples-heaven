@@ -8,12 +8,14 @@ PIXI.loader
     .add('dragon', 'required/assets/spine/dragon.json')
     .load(onAssetsLoaded);
 
+PIXI.heaven.settings.MESH_PLUGIN = 'spriteHeaven';
+
 var dragon = null;
 
 function onAssetsLoaded(loader,res)
 {
     // instantiate the spine animation
-    dragon = new PIXI.spine.Spine(res.dragon.spineData);
+    dragon = new PIXI.heaven.spine.Spine(res.dragon.spineData);
     dragon.skeleton.setToSetupPose();
     dragon.update(0);
     dragon.autoUpdate = false;

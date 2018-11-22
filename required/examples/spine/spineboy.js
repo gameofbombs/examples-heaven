@@ -8,10 +8,12 @@ PIXI.loader
 
 app.stage.interactive = true;
 
+PIXI.heaven.settings.MESH_PLUGIN = 'spriteHeaven';
+
 function onAssetsLoaded(loader, res)
 {
     // create a spine boy
-    var spineBoy = new PIXI.spine.Spine(res.spineboy.spineData);
+    var spineBoy = new PIXI.heaven.spine.Spine(res.spineboy.spineData);
 
     // set the position
     spineBoy.x = app.screen.width / 2;

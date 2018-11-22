@@ -6,6 +6,13 @@
             "plugins": [
                 "pixi-heaven"
             ]
+        },
+		{
+            "title": "Container Pivot",
+            "entry": "container-pivot.js",
+            "plugins": [
+                "pixi-heaven"
+            ]
         }
     ],
     "mesh": [
@@ -42,6 +49,13 @@
         {
             "title": "Overlay blendMode",
             "entry": "overlay.js",
+            "plugins": [
+                "pixi-picture"
+            ]
+        },
+        {
+            "title": "Displacement",
+            "entry": "displacement-backdrop.js",
             "plugins": [
                 "pixi-picture"
             ]

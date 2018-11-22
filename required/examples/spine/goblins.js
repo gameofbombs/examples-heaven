@@ -9,9 +9,11 @@ PIXI.loader
 app.stage.interactive = true;
 app.stage.buttonMode = true;
 
+PIXI.heaven.settings.MESH_PLUGIN = 'spriteHeaven';
+
 function onAssetsLoaded(loader, res)
 {
-    var goblin = new PIXI.spine.Spine(res.goblins.spineData);
+    var goblin = new PIXI.heaven.spine.Spine(res.goblins.spineData);
 
     // set current skin
     goblin.skeleton.setSkinByName('goblin');
