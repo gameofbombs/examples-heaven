@@ -769,13 +769,15 @@ var pixi_heaven;
             this.onContextChange = function (gl) {
                 _this.gl = gl;
                 _this.renderer.textureManager.updateTexture = _this.updateTexture;
+                _this.renderer.textureManager.destroyTexture = _this.destroyTexture;
                 _this.extensions = {
                     depthTexture: gl.getExtension('WEBKIT_WEBGL_depth_texture'),
                     floatTexture: gl.getExtension('OES_texture_float'),
                 };
             };
             this.updateTexture = function (texture_, location) {
-                var tm = _this.renderer.textureManager;
+                var renderer = _this.renderer;
+                var tm = renderer.textureManager;
                 var gl = _this.gl;
                 var anyThis = _this;
                 var texture = texture_.baseTexture || texture_;
@@ -802,6 +804,9 @@ var pixi_heaven;
                         renderTarget.resize(texture.width, texture.height);
                         texture._glRenderTargets[_this.renderer.CONTEXT_UID] = renderTarget;
                         glTexture = renderTarget.texture;
+                        if (!renderer._activeRenderTarget.root) {
+                            renderer._activeRenderTarget.frameBuffer.bind();
+                        }
                     }
                     else {
                         glTexture = new PIXI.glCore.GLTexture(_this.gl, null, null, null, null);
@@ -813,13 +818,16 @@ var pixi_heaven;
                 }
                 else if (isRenderTexture) {
                     texture._glRenderTargets[_this.renderer.CONTEXT_UID].resize(texture.width, texture.height);
+                    if (!renderer._activeRenderTarget.root) {
+                        renderer._activeRenderTarget.frameBuffer.bind();
+                    }
                 }
                 glTexture.premultiplyAlpha = texture.premultipliedAlpha;
                 if (!isRenderTexture) {
                     if (!texture.resource) {
                         glTexture.upload(texture.source);
                     }
-                    else if (!texture.resource.onTextureUpload(_this.renderer, texture, glTexture)) {
+                    else if (!texture.resource.onTextureUpload(renderer, texture, glTexture)) {
                         glTexture.uploadData(null, texture.realWidth, texture.realHeight);
                     }
                 }
@@ -828,6 +836,37 @@ var pixi_heaven;
                 }
                 glTexture._updateID = texture._updateID;
                 return glTexture;
+            };
+            this.destroyTexture = function (texture_, skipRemove) {
+                var texture = texture_.baseTexture || texture_;
+                if (!texture.hasLoaded) {
+                    return;
+                }
+                var renderer = _this.renderer;
+                var tm = renderer.textureManager;
+                var uid = renderer.CONTEXT_UID;
+                var glTextures = texture._glTextures;
+                var glRenderTargets = texture._glRenderTargets;
+                if (glTextures[uid]) {
+                    renderer.unbindTexture(texture);
+                    glTextures[uid].destroy();
+                    texture.off('update', tm.updateTexture, tm);
+                    texture.off('dispose', tm.destroyTexture, tm);
+                    delete glTextures[uid];
+                    if (!skipRemove) {
+                        var i = tm._managedTextures.indexOf(texture);
+                        if (i !== -1) {
+                            PIXI.utils.removeItems(tm._managedTextures, i, 1);
+                        }
+                    }
+                }
+                if (glRenderTargets && glRenderTargets[uid]) {
+                    if (renderer._activeRenderTarget === glRenderTargets[uid]) {
+                        renderer.bindRenderTarget(renderer.rootRenderTarget);
+                    }
+                    glRenderTargets[uid].destroy();
+                    delete glRenderTargets[uid];
+                }
             };
             this.renderer = renderer;
             renderer.on('context', this.onContextChange);
@@ -2925,7 +2964,6 @@ var pixi_heaven;
 (function (pixi_heaven) {
     var webgl;
     (function (webgl) {
-        var MultiTextureSpriteRenderer = pixi_heaven.webgl.MultiTextureSpriteRenderer;
         var premultiplyBlendMode = PIXI.utils.premultiplyBlendMode;
         var tempArray = new Float32Array([0, 0, 0, 0]);
         var SpriteMaskedRenderer = (function (_super) {
@@ -3119,7 +3157,7 @@ var pixi_heaven;
                         }
                     }
                     this.renderer.state.setBlendMode(group.blend);
-                    gl.drawElements(gl.TRIANGLES, group.size * 6, gl.UNSIGNED_SHORT, group.start * 6 * 2);
+                    gl.drawElements(gl.TRIANGLES, group.size, gl.UNSIGNED_SHORT, group.start * 2);
                 }
                 this.currentIndex = 0;
                 this.countVertex = 0;
@@ -3131,7 +3169,7 @@ var pixi_heaven;
                 this.shader = webgl.generateMultiTextureShader(this.shaderVert, this.shaderFrag, gl, this.MAX_TEXTURES);
             };
             return SpriteMaskedRenderer;
-        }(MultiTextureSpriteRenderer));
+        }(webgl.MultiTextureSpriteRenderer));
         PIXI.WebGLRenderer.registerPlugin('spriteMasked', SpriteMaskedRenderer);
     })(webgl = pixi_heaven.webgl || (pixi_heaven.webgl = {}));
 })(pixi_heaven || (pixi_heaven = {}));

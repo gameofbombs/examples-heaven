@@ -13,6 +13,13 @@
             "plugins": [
                 "pixi-heaven"
             ]
+        },
+        {
+            "title": "Decals",
+            "entry": "decals.js",
+            "plugins": [
+                "pixi-heaven"
+            ]
         }
     ],
     "mesh": [
