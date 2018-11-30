@@ -30,7 +30,8 @@ var pixi_heaven;
 (function (pixi_heaven) {
     pixi_heaven.settings = {
         MESH_PLUGIN: 'meshHeaven',
-        SPINE_MESH_PLUGIN: 'spriteHeaven'
+        SPINE_MESH_PLUGIN: 'spriteHeaven',
+        TEXTURE_MANAGER: true
     };
 })(pixi_heaven || (pixi_heaven = {}));
 var pixi_heaven;
@@ -768,8 +769,10 @@ var pixi_heaven;
             this.extensions = null;
             this.onContextChange = function (gl) {
                 _this.gl = gl;
-                _this.renderer.textureManager.updateTexture = _this.updateTexture;
-                _this.renderer.textureManager.destroyTexture = _this.destroyTexture;
+                if (pixi_heaven.settings.TEXTURE_MANAGER) {
+                    _this.renderer.textureManager.updateTexture = _this.updateTexture;
+                    _this.renderer.textureManager.destroyTexture = _this.destroyTexture;
+                }
                 _this.extensions = {
                     depthTexture: gl.getExtension('WEBKIT_WEBGL_depth_texture'),
                     floatTexture: gl.getExtension('OES_texture_float'),
@@ -779,7 +782,6 @@ var pixi_heaven;
                 var renderer = _this.renderer;
                 var tm = renderer.textureManager;
                 var gl = _this.gl;
-                var anyThis = _this;
                 var texture = texture_.baseTexture || texture_;
                 var isRenderTexture = !!texture._glRenderTargets;
                 if (!texture.hasLoaded) {
@@ -816,10 +818,13 @@ var pixi_heaven;
                     texture.on('update', tm.updateTexture, tm);
                     texture.on('dispose', tm.destroyTexture, tm);
                 }
-                else if (isRenderTexture) {
-                    texture._glRenderTargets[_this.renderer.CONTEXT_UID].resize(texture.width, texture.height);
-                    if (!renderer._activeRenderTarget.root) {
-                        renderer._activeRenderTarget.frameBuffer.bind();
+                else {
+                    glTexture.bind();
+                    if (isRenderTexture) {
+                        texture._glRenderTargets[_this.renderer.CONTEXT_UID].resize(texture.width, texture.height);
+                        if (!renderer._activeRenderTarget.root) {
+                            renderer._activeRenderTarget.frameBuffer.bind();
+                        }
                     }
                 }
                 glTexture.premultiplyAlpha = texture.premultipliedAlpha;
@@ -3078,7 +3083,7 @@ var pixi_heaven;
                             currentMaskTexture = nextMaskTexture;
                             currentGroup.textures[1] = nextMaskTexture;
                         }
-                        else {
+                        else if (currentMaskTexture !== nextMaskTexture) {
                             currentTexture = null;
                             currentMaskTexture = null;
                             textureCount = MAX_TEXTURES;
@@ -3103,11 +3108,11 @@ var pixi_heaven;
                         currentMaskTexture = nextMaskTexture;
                         if (textureCount === MAX_TEXTURES) {
                             textureCount = 0;
-                            currentGroup.size = i - currentGroup.start;
+                            currentGroup.size = posIndex - currentGroup.start;
                             currentGroup = groups[groupCount++];
                             currentGroup.textureCount = 0;
                             currentGroup.blend = blendMode;
-                            currentGroup.start = i;
+                            currentGroup.start = posIndex;
                             currentGroup.uniforms = currentUniforms;
                         }
                         nextTexture._virtalBoundId = textureCount;
@@ -3137,9 +3142,13 @@ var pixi_heaven;
                 currentGroup.size = posIndex - currentGroup.start;
                 var curVertexCount = this.vertexCount;
                 var isNewBuffer = this.checkVaoMax();
-                var ib = hasMesh ? this.indexBuffers[curVertexCount] : this.indexBuffer;
                 this.vertexBuffers[curVertexCount].upload(buffer.vertices, 0, !isNewBuffer);
-                ib.bind();
+                if (hasMesh) {
+                    this.indexBuffers[curVertexCount].upload(bufferIndex, 0);
+                }
+                else {
+                    this.indexBuffer.bind();
+                }
                 for (i = 0; i < groupCount; i++) {
                     var group = groups[i];
                     var groupTextureCount = 2;
