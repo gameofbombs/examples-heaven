@@ -614,15 +614,16 @@ var pixi_heaven;
                 var uint32View = buffer.uint32View;
                 var nextTexture;
                 var currentTexture;
-                var currentUniforms = null;
                 var groupCount = 1;
                 var textureCount = 0;
                 var currentGroup = groups[0];
                 var blendMode = premultiplyBlendMode[sprites[0]._texture.baseTexture.premultipliedAlpha ? 1 : 0][sprites[0].blendMode];
+                var currentUniforms = this.getUniforms(sprites[0]);
                 var hasMesh = false;
                 currentGroup.textureCount = 0;
                 currentGroup.start = 0;
                 currentGroup.blend = blendMode;
+                currentGroup.uniforms = currentUniforms;
                 TICK++;
                 var i;
                 var posVertex = 0;
@@ -638,9 +639,8 @@ var pixi_heaven;
                         textureCount = MAX_TEXTURES;
                         TICK++;
                     }
-                    var uniforms = this.getUniforms(sprite);
+                    var uniforms = i == 0 ? currentUniforms : this.getUniforms(sprite);
                     if (currentUniforms !== uniforms) {
-                        currentUniforms = uniforms;
                         currentTexture = null;
                         textureCount = MAX_TEXTURES;
                         TICK++;
@@ -661,6 +661,7 @@ var pixi_heaven;
                             nextTexture._enabled = TICK;
                             nextTexture._virtalBoundId = textureCount;
                             currentGroup.textures[currentGroup.textureCount++] = nextTexture;
+                            currentGroup.uniforms = uniforms;
                             textureCount++;
                         }
                     }
@@ -692,6 +693,7 @@ var pixi_heaven;
                 else {
                     this.indexBuffer.bind();
                 }
+                currentUniforms = null;
                 for (i = 0; i < groupCount; i++) {
                     var group = groups[i];
                     var groupTextureCount = group.textureCount;
@@ -3059,15 +3061,16 @@ var pixi_heaven;
                 var uint32View = buffer.uint32View;
                 var nextTexture, nextMaskTexture;
                 var currentTexture, currentMaskTexture = null;
-                var currentUniforms = null;
                 var groupCount = 1;
                 var textureCount = 0;
                 var currentGroup = groups[0];
                 var blendMode = premultiplyBlendMode[sprites[0]._texture.baseTexture.premultipliedAlpha ? 1 : 0][sprites[0].blendMode];
+                var currentUniforms = this.getUniforms(sprites[0]);
                 var hasMesh = false;
                 currentGroup.textureCount = 0;
                 currentGroup.start = 0;
                 currentGroup.blend = blendMode;
+                currentGroup.uniforms = currentUniforms;
                 var i;
                 var posVertex = 0;
                 var posIndex = 0;
@@ -3096,9 +3099,8 @@ var pixi_heaven;
                         currentMaskTexture = null;
                         textureCount = MAX_TEXTURES;
                     }
-                    var uniforms = this.getUniforms(sprite);
+                    var uniforms = i == 0 ? currentUniforms : this.getUniforms(sprite);
                     if (currentUniforms !== uniforms) {
-                        currentUniforms = uniforms;
                         currentTexture = null;
                         currentMaskTexture = null;
                         textureCount = MAX_TEXTURES;
@@ -3113,12 +3115,12 @@ var pixi_heaven;
                             currentGroup.textureCount = 0;
                             currentGroup.blend = blendMode;
                             currentGroup.start = posIndex;
-                            currentGroup.uniforms = currentUniforms;
                         }
                         nextTexture._virtalBoundId = textureCount;
                         currentGroup.textureCount = MAX_TEXTURES;
                         currentGroup.textures[0] = nextTexture;
                         currentGroup.textures[1] = nextMaskTexture || PIXI.Texture.WHITE.baseTexture;
+                        currentGroup.uniforms = uniforms;
                         textureCount = MAX_TEXTURES;
                     }
                     this.fillVertices(float32View, uint32View, posVertex * this.vertSize, sprite, nextTexture._virtalBoundId);
@@ -3149,6 +3151,7 @@ var pixi_heaven;
                 else {
                     this.indexBuffer.bind();
                 }
+                currentUniforms = null;
                 for (i = 0; i < groupCount; i++) {
                     var group = groups[i];
                     var groupTextureCount = 2;

@@ -66,6 +66,13 @@
             "plugins": [
                 "pixi-picture"
             ]
+        },
+        {
+            "title": "Pixelate",
+            "entry": "pixelate-backdrop.js",
+            "plugins": [
+                "pixi-picture"
+            ]
         }
     ],
     "layers": [

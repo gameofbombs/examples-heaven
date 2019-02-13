@@ -221,6 +221,7 @@ var pixi_picture;
         renderer.boundTextures[1] = renderer.emptyTextures[1];
         gl.activeTexture(gl.TEXTURE0 + 1);
         gl.bindTexture(gl.TEXTURE_2D, rt.texture.texture);
+        renderer.bindRenderTarget(renderTarget);
         gl.copyTexSubImage2D(gl.TEXTURE_2D, 0, 0, 0, x, y, w, h);
         return rt;
     }
