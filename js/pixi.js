@@ -7,7 +7,7 @@ function getParameterByName(name) {
 
 jQuery(document).ready(function($) {
     window.onpopstate = function (event) {
-        bpc.version = event.state || 'release';
+        bpc.version = event.state || 'v4.8.8';
         bpc.generateIFrameContent();
 
         $('.select-group .select li.selected').removeClass('selected');
@@ -23,7 +23,7 @@ jQuery(document).ready(function($) {
     bpc.aniOut = 0.3;
     bpc.currentSource = '';
     bpc.currentFilename = '';
-    bpc.version = getParameterByName('v') || 'release';
+    bpc.version = getParameterByName('v') || 'v4.8.8';
     bpc.plugins = '';
 
     bpc.clickType = Modernizr.touchevents ? 'tap' : 'click';
@@ -303,9 +303,6 @@ jQuery(document).ready(function($) {
         var plugins = bpc.plugins === '' ? [] : bpc.plugins.split(',');
 
         if (!isLocal) {
-            if (bpc.version !== "release" && bpc.version !== "dev" && bpc.version.substring(0, 4) !== "next") {
-                html += '<script src="required/plugins/pixi-legacy.js"></script>';
-            }
             for (i=0; i < plugins.length; i++) {
                 html += '<script src="required/plugins/'+plugins[i]+'.js"></script>';
             }
